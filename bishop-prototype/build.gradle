@@ -27,7 +27,7 @@ repositories {
 		url = uri("https://maven.pkg.github.com/mikl14/T1_HW_2")
 		credentials {
 			username = System.getenv("GITHUB_ACTOR") ?: "mikl14"
-			password = "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"
+			password = "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"
 		}
 	}
 }
