@@ -4,10 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Tags;
+import io.micrometer.core.instrument.binder.MeterBinder;
 import io.micrometer.core.instrument.binder.jvm.ExecutorServiceMetrics;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.Scope;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -33,12 +33,13 @@ public class AppConfig {
     @Bean
     public ThreadPoolExecutor threadPoolExecutor(MeterRegistry meterRegistry) {
         BlockingQueue<Runnable> workQueue = new ArrayBlockingQueue<>(10);
-        ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(
+        return new ThreadPoolExecutor(
                 4, 8, 30, TimeUnit.SECONDS, workQueue, new ThreadPoolExecutor.AbortPolicy());
+    }
 
-        ExecutorServiceMetrics.monitor(meterRegistry, threadPoolExecutor, "custom.thread-pool", Tags.empty());
-
-        return threadPoolExecutor;
+    @Bean
+    public MeterBinder threadPoolMetrics(ThreadPoolExecutor executor) {
+        return registry -> ExecutorServiceMetrics.monitor(registry, executor, "custom.thread-pool", Tags.empty());
     }
 
     @Bean

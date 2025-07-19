@@ -19,15 +19,18 @@ configurations {
 	}
 }
 
+// Для простоты тестирования в докере, пакет залит на GitHub, но для доступа
+// к нему нужно авторизироваться, ваши данные от гита нужно вставить ниже
+// вместо пароля можно вставить временный токен с доступом только для чтения
 repositories {
 	mavenCentral()
-
+	mavenLocal()
 	maven {
 		name = "GitHubPackages"
 		url = uri("https://maven.pkg.github.com/mikl14/T1_HW_2")
 		credentials {
-			username = System.getenv("GITHUB_ACTOR") ?: "mikl14"
-			password = "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"
+			username = System.getenv("GITHUB_ACTOR") ?: "Ваш логин"
+			password = "Ваш токен или пароль"
 		}
 	}
 }

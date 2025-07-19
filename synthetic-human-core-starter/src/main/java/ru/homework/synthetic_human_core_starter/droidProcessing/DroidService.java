@@ -23,6 +23,11 @@ public abstract class DroidService {
         this.meterRegistry = meterRegistry;
     }
 
+    /**
+     * <b>processCommand</b> - метод выполнения команды с проверкой на тип команды
+     * @param command
+     * @throws RejectedExecutionException
+     */
     public final void processCommand(Command command) throws RejectedExecutionException {
         if (isCritical(command)) {
             processCriticalCommand(command);
@@ -36,21 +41,25 @@ public abstract class DroidService {
         return command.getCommandLevel().equals(CommandLevel.CRITICAL);
     }
 
-    // Обработка критичной команды (можно переопределить)
+    /**
+     * <b>processCriticalCommand</b> - метод обработки critical команд (рассчитанно что будет переопределен наследниками)
+     * @param command
+     */
     protected void processCriticalCommand(Command command) {
         logger.info(command.toString());
     }
 
-    // Обработка не критичной команды (можно переопределить)
     protected void processNonCriticalCommand(Command command) {
         threadPoolExecutor.submit(() -> logger.info(command.toString()));
     }
 
-    // Пост-обработка (например, метрики) — можно дополнять
+    /**
+     * <b>postProcess</b> - метод постобработки команд по умолчанию в нем метрики
+     * @param command
+     */
     protected void postProcess(Command command) {
         meterRegistry.counter("commands.completed", "author", command.getAuthor())
                 .increment();
         meterRegistry.gauge("commands.queue.size", threadPoolExecutor.getQueue(), BlockingQueue::size);
     }
-
 }

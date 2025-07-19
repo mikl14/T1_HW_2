@@ -28,6 +28,12 @@ public abstract class DroidRestController {
         this.droidService = droidService;
     }
 
+    /**
+     * <b>validateCommand</b> - десериализует команду и возвращает Command если она соответствует формату
+     * @param bodyCommand
+     * @return Command
+     * @throws NoValidCommandException
+     */
     protected Command validateCommand(String bodyCommand) throws NoValidCommandException {
         try {
             return mapper.readValue(bodyCommand, Command.class);
@@ -36,6 +42,11 @@ public abstract class DroidRestController {
         }
     }
 
+    /**
+     * <b>doCommand</b> - отправляет задачу на выполнение после валидации
+     * @param bodyCommand
+     * @return
+     */
     @PostMapping("/doCommand")
     public ResponseEntity<String> doCommand(@RequestBody String bodyCommand) {
         try {
@@ -52,7 +63,6 @@ public abstract class DroidRestController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Droid is too busy: " + e.getMessage());
         } catch (Exception e) {
-            // Общий catch для других ошибок
             logger.error("Unexpected error processing command", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Internal droid error");

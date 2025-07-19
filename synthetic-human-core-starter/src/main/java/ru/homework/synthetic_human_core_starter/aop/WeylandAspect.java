@@ -1,7 +1,8 @@
 package ru.homework.synthetic_human_core_starter.aop;
 
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.*;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -15,10 +16,18 @@ public class WeylandAspect {
     private static final Logger logger = LoggerFactory.getLogger(WeylandAspect.class);
     private final KafkaTemplate<String, String> kafkaTemplate;
 
+
     public WeylandAspect(KafkaTemplate<String, String> kafkaTemplate) {
         this.kafkaTemplate = kafkaTemplate;
     }
 
+    /**
+     * *<b>logMethod</b> - метод логирования всего что отмечено аннотацией через логер и кафку
+     *
+     * @param joinPoint
+     * @param weylandWatchingYou
+     * @throws Throwable
+     */
     @Around("@annotation(weylandWatchingYou)")
     public Object logMethod(ProceedingJoinPoint joinPoint, WeylandWatchingYou weylandWatchingYou) throws Throwable {
         String methodName = joinPoint.getSignature().toShortString();
@@ -26,7 +35,7 @@ public class WeylandAspect {
 
         logger.info("ENTER: {}", methodName);
         if (!topic.isEmpty()) {
-            kafkaTemplate.send(topic, "ENTER: " + methodName);
+            kafkaTemplate.send(topic, "Enter in method: " + methodName);
         }
 
         try {
@@ -34,7 +43,7 @@ public class WeylandAspect {
 
             logger.info("EXIT: {} with result {}", methodName, result);
             if (!topic.isEmpty()) {
-                kafkaTemplate.send(topic, "EXIT: " + methodName + " with result " + result);
+                kafkaTemplate.send(topic, "Exit from method: " + methodName + " with result " + result);
             }
             return result;
         } catch (Throwable ex) {

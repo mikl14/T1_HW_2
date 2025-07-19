@@ -18,12 +18,23 @@ public class Bishop extends DroidService {
     public Bishop(ThreadPoolExecutor threadPoolExecutor, MeterRegistry meterRegistry) {
         super(threadPoolExecutor, meterRegistry);
     }
+
+    /**
+     * <b>processCriticalCommand</b> - переопределяет выполнение критической команды, аннотация отправляет логи в kafka топик
+     *
+     * @param command
+     */
     @Override
     @WeylandWatchingYou(kafkaTopic = "droidTopic")
     public void processCriticalCommand(Command command) {
         logger.info("Бишоп выполняет критически важную задачу: ! " + command.toString());
     }
 
+    /**
+     * <b>processNonCriticalCommand</b> - переопределяет выполнение обычных команд
+     *
+     * @param command
+     */
     @Override
     public void processNonCriticalCommand(Command command) {
         logger.info("Бишоп выполняет обычную задачу: ! " + command.toString());

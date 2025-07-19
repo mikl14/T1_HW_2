@@ -7,11 +7,10 @@ import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
+@Getter
 public class Command {
-    @Getter
     private String description, author, time;
     @Setter
-    @Getter
     private CommandLevel commandLevel;
 
     public Command() {
@@ -24,19 +23,34 @@ public class Command {
         this.commandLevel = commandLevel;
     }
 
+    /**
+     * <b>setDescription</b> - при присваивании проверяет длину, она не должна превышать 1000
+     *
+     * @param description
+     */
+
     public void setDescription(String description) {
         if (description != null && description.length() > 1000)
             throw new IllegalArgumentException("Description length must be <= 1000");
         this.description = description;
     }
 
+    /**
+     * <b>setAuthor</b> - при присваивании проверяет длину, она не должна превышать 1000
+     *
+     * @param author
+     */
     public void setAuthor(String author) {
         if (author != null && author.length() > 1000)
             throw new IllegalArgumentException("Author length must be <= 1000");
         this.author = author;
     }
 
-
+    /**
+     * <b>setTime</b> - при присваивании проверяет что время соответствует формату ISO8601
+     *
+     * @param time
+     */
     public void setTime(String time) {
         if (time == null)
             throw new IllegalArgumentException("Time cannot be null!");

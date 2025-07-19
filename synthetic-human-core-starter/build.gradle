@@ -26,22 +26,23 @@ publishing {
 	repositories {
 		maven {
 			name = "GitHubPackages"
-			url = uri("https://maven.pkg.github.com/mikl14/T1_HW_2")  // без .git
+			url = uri("https://maven.pkg.github.com/mikl14/T1_HW_2")  
 			credentials {
-				username = "mikl14"
-				password = "Тут был мой токен для публикации"
+				username = "Тут логин"
+				password = "тут токен для публикации"
 			}
 		}
 	}
 }
 repositories {
+	mavenLocal()
 	mavenCentral()
 }
 
-/task publishToGitHubPackages(type: PublishToMavenRepository) {
+task publishToGitHubPackages(type: PublishToMavenRepository) {
 	publication = publishing.publications.mavenJava
 	repository = publishing.repositories.GitHubPackages
-}*/
+}
 
 
 dependencies {

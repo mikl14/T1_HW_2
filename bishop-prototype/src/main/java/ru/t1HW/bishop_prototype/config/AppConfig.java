@@ -18,6 +18,6 @@ public class AppConfig {
     @Bean
     @Scope("singleton")
     public DroidService droidService(ThreadPoolExecutor threadPoolExecutor, MeterRegistry meterRegistry) {
-        return new Bishop(threadPoolExecutor,meterRegistry);
+        return new Bishop(threadPoolExecutor, meterRegistry);
     }
 }

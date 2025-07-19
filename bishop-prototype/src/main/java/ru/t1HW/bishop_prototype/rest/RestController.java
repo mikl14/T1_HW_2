@@ -10,5 +10,4 @@ public class RestController extends DroidRestController {
         super(mapper, droidService);
     }
 
-
 }
