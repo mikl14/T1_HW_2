@@ -38,10 +38,10 @@ repositories {
 	mavenCentral()
 }
 
-task publishToGitHubPackages(type: PublishToMavenRepository) {
+/task publishToGitHubPackages(type: PublishToMavenRepository) {
 	publication = publishing.publications.mavenJava
 	repository = publishing.repositories.GitHubPackages
-}
+}*/
 
 
 dependencies {
