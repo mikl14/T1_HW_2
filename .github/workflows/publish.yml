@@ -1,0 +1,26 @@
+name: Droid Starter
+
+on:
+  push:
+    branches:
+      - main  # или ваша ветка релиза
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          server-id: github  # это соответствует id репозитория в gradle
+          settings-path: ${{ github.workspace }}
+
+      - name: Publish to GitHub Packages
+        run: ./gradlew publish
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

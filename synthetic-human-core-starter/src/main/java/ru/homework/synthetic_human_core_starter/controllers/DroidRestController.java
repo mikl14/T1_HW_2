@@ -13,33 +13,30 @@ import ru.homework.synthetic_human_core_starter.droidProcessing.DroidService;
 import ru.homework.synthetic_human_core_starter.exceptions.NoValidCommandException;
 
 import java.util.concurrent.RejectedExecutionException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 @org.springframework.web.bind.annotation.RestController
 @RequestMapping("/droid/api")
 
-public class RestController {
+public abstract class DroidRestController {
     private final ObjectMapper mapper;
-    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(RestController.class);
+    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(DroidRestController.class);
     private final DroidService droidService;
 
 
-    public RestController(ObjectMapper mapper, DroidService droidService) {
+    public DroidRestController(ObjectMapper mapper, DroidService droidService) {
         this.mapper = mapper;
         this.droidService = droidService;
     }
-    @WeylandWatchingYou(kafkaTopic = "myTopic")
-    private Command validateCommand(String bodyCommand) throws NoValidCommandException {
+
+    protected Command validateCommand(String bodyCommand) throws NoValidCommandException {
         try {
             return mapper.readValue(bodyCommand, Command.class);
         } catch (Exception e) {
-            throw new NoValidCommandException("No valid command!");
+            throw new NoValidCommandException("Команда не соответствует формату! " + e);
         }
     }
 
     @PostMapping("/doCommand")
-
     public ResponseEntity<String> doCommand(@RequestBody String bodyCommand) {
         try {
             Command command = validateCommand(bodyCommand);
@@ -47,17 +44,14 @@ public class RestController {
             return ResponseEntity.ok("Command processed successfully");
 
         } catch (NoValidCommandException e) {
-            logger.error( e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Invalid command: " + e.getMessage());
-        }
-        catch (RejectedExecutionException e)
-        {
+        } catch (RejectedExecutionException e) {
             logger.error("Очередь переполнена, задача отклонена: ");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Droid is too busy: " + e.getMessage());
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             // Общий catch для других ошибок
             logger.error("Unexpected error processing command", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

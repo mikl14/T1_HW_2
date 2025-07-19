@@ -2,10 +2,9 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.5.3'
 	id 'io.spring.dependency-management' version '1.1.7'
-	id 'maven-publish'
 }
 
-group = 'ru.homework'
+group = 'ru.t1HW'
 version = '0.0.1-SNAPSHOT'
 
 java {
@@ -14,48 +13,38 @@ java {
 	}
 }
 
-publishing {
-	publications {
-		mavenJava(MavenPublication) {
-			from components.java
-			groupId = project.group.toString()
-			artifactId = 'synthetic-human-core-starter'  // ваш артефакт
-			version = project.version.toString()
-		}
-	}
-	repositories {
-		maven {
-			name = "GitHubPackages"
-			url = uri("https://maven.pkg.github.com/mikl14/T1_HW_2")  // без .git
-			credentials {
-				username = "mikl14"
-				password = "Тут был мой токен для публикации"
-			}
-		}
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
 	}
 }
+
 repositories {
 	mavenCentral()
-}
 
-task publishToGitHubPackages(type: PublishToMavenRepository) {
-	publication = publishing.publications.mavenJava
-	repository = publishing.repositories.GitHubPackages
+	maven {
+		name = "GitHubPackages"
+		url = uri("https://maven.pkg.github.com/mikl14/T1_HW_2")
+		credentials {
+			username = System.getenv("GITHUB_ACTOR") ?: "mikl14"
+			password = "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"
+		}
+	}
 }
-
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.kafka:spring-kafka'
+	implementation 'ru.homework:synthetic-human-core-starter:0.0.1-SNAPSHOT'
 	implementation group: 'aspectj', name: 'aspectjweaver', version: '1.5.4'
-	implementation 'org.springframework.boot:spring-boot-starter-aop'
 
+	implementation 'org.springframework.boot:spring-boot-starter-aop'
 	implementation 'org.apache.logging.log4j:log4j-api:2.20.0'
 	implementation 'org.apache.logging.log4j:log4j-core:2.20.0'
-	compileOnly 'org.projectlombok:lombok:1.18.34'
-	annotationProcessor 'org.projectlombok:lombok:1.18.34'
 
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.kafka:spring-kafka-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
