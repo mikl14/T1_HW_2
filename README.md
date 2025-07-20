@@ -1,8 +1,9 @@
+#Домашнее задание №3
 # synthetic-human-core-starter
 
 ## Описание
 
-**synthetic-human-core-starter** — стартовый модуль для проектов на базе [bishop-prototype](https://github.com/mikl14/T1_HW_2/tree/main/bishop-prototype), объединённых в этом репозитории. Модуль служит отправной точкой для разработки и тестирования решений на основе команд и REST-интерфейсов.
+**synthetic-human-core-starter** — стартер разработанный согласно ТЗ в ДЗ3
 
 ## Содержание
 
@@ -15,7 +16,7 @@
 
 ## Быстрый запуск
 
-1. Убедитесь, что в директории присутствует файл `docker-compose.yml`.
+1. В директории присутствует файл `docker-compose.yml`.
 2. Выполните команду для запуска окружения: docker-compose up --build
 
 3. Для доступа к удалённому пакету [ru.homework.synthetic-human-core-starter](https://github.com/mikl14/T1_HW_2/packages/2586266) потребуется:
@@ -32,7 +33,7 @@
 
 ## Структура проекта
 
-### synthetic-human-core-starter модуль
+### synthetic-human-core-starter
 
 Основные компоненты:
 
