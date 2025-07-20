@@ -1,25 +1,50 @@
 # synthetic-human-core-starter
 
-## Описание проекта
+## Описание
 
-В этом репозитории находится проект [synthetic-human-core-starter](https://github.com/mikl14/T1_HW_2/tree/main/synthetic-human-core-starter) — исходный код стартера, который подключается в проект [bishop-prototype](https://github.com/mikl14/T1_HW_2/tree/main/bishop-prototype), находящийся в том же репозитории.
+**synthetic-human-core-starter** — стартовый модуль для проектов на базе [bishop-prototype](https://github.com/mikl14/T1_HW_2/tree/main/bishop-prototype), объединённых в этом репозитории. Модуль служит отправной точкой для разработки и тестирования решений на основе команд и REST-интерфейсов.
 
-## Быстрый запуск с Docker Compose
+## Содержание
 
-В репозитории есть файл `docker-compose.yml`, с помощью которого можно быстро развернуть окружение и проверить работу проекта.
-### Однако
-Для быстрого запуска вам понадобиться доступ к удаленному пакету [ru.homework.synthetic-human-core-starter](https://github.com/mikl14/T1_HW_2/packages/2586266).
-Так как он загруженн на гитхаб вам придеться вставить в build.gradle ваш логин и токен для чтения.
+- [Описание](#описание)
+- [Быстрый запуск](#быстрый-запуск)
+- [Требования](#требования)
+- [Структура проекта](#структура-проекта)
+  - [synthetic-human-core-starter](#synthetic-human-core-starter-модуль)
+  - [bishop-prototype](#bishop-prototype-модуль)
 
-## В случае если у вас нету Github аккаунта
-воспользуйтесь, MVNLocal
+## Быстрый запуск
 
-# Структура  [synthetic-human-core-starter](https://github.com/mikl14/T1_HW_2/tree/main/synthetic-human-core-starter)
+1. Убедитесь, что в директории присутствует файл `docker-compose.yml`.
+2. Выполните команду для запуска окружения: docker-compose up --build
 
-Проект содержит классы
+3. Для доступа к удалённому пакету [ru.homework.synthetic-human-core-starter](https://github.com/mikl14/T1_HW_2/packages/2586266) потребуется:
+- ваш логин на GitHub
+- персональный токен, добавленный в `build.gradle`
 
-Command - класс определяющий объект команды, в него команда переданная по REST десериализуется чере objectMapper, Имеет связанный enum для типов команд
-DroidRestController - Абстрактный класс для наследования рест контроллеров, имеет метод валидации команд и метод отправляющий команду в работу
-DroidService - Абстрактный класс, содержит логику обработки команд
-WeylandWatchingYou - аннотация для логирования методов
-WeylandAspect - аспект с логикой работы аннотации
+**Важно!** Если у вас нет аккаунта GitHub, используйте локальный вариант установки через MVNLocal.
+
+## Требования
+
+- Docker и docker-compose
+- Java и Gradle (для ручной сборки или работы с зависимостями)
+- GitHub-аккаунт и токен (если используете удалённый пакет)
+
+## Структура проекта
+
+### synthetic-human-core-starter модуль
+
+Основные компоненты:
+
+- **Command** — класс команды, в который десериализуется команда из REST-запроса (связан с enum типов команд)
+- **DroidRestController** — абстрактный родительский класс REST-контроллеров (валидирует и отправляет команду в обработку)
+- **DroidService** — абстрактный сервис для логики обработки входящих команд
+- **WeylandWatchingYou** — аннотация для логирования методов
+- **WeylandAspect** — аспект, реализующий поведение логирования с помощью аннотации
+
+### bishop-prototype модуль
+
+- **Bishop** — наследует `DroidService`, переопределяя некоторые методы базового класса
+- **RestController** — наследует `DroidRestController`
+
+---
