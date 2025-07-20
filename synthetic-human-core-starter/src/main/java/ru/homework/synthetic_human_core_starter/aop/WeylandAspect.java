@@ -32,22 +32,27 @@ public class WeylandAspect {
     public Object logMethod(ProceedingJoinPoint joinPoint, WeylandWatchingYou weylandWatchingYou) throws Throwable {
         String methodName = joinPoint.getSignature().toShortString();
         String topic = weylandWatchingYou.kafkaTopic();
-
-        logger.info("ENTER: {}", methodName);
+        boolean logToTerminal =weylandWatchingYou.logToTerminal();
+        if(logToTerminal) {
+            logger.info("Enter in method: {}", methodName);
+        }
         if (!topic.isEmpty()) {
             kafkaTemplate.send(topic, "Enter in method: " + methodName);
         }
 
         try {
             Object result = joinPoint.proceed();
-
-            logger.info("EXIT: {} with result {}", methodName, result);
+            if(logToTerminal) {
+                logger.info("Exit from method: {} with result {}", methodName, result);
+            }
             if (!topic.isEmpty()) {
                 kafkaTemplate.send(topic, "Exit from method: " + methodName + " with result " + result);
             }
             return result;
         } catch (Throwable ex) {
-            logger.error("EXCEPTION in {}: {}", methodName, ex.getMessage());
+            if(logToTerminal) {
+                logger.error("EXCEPTION in {}: {}", methodName, ex.getMessage());
+            }
             if (!topic.isEmpty()) {
                 kafkaTemplate.send(topic, "EXCEPTION in " + methodName + ": " + ex.getMessage());
             }

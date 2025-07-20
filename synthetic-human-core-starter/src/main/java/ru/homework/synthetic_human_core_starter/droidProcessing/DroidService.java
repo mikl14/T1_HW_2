@@ -33,8 +33,8 @@ public abstract class DroidService {
             processCriticalCommand(command);
         } else {
             processNonCriticalCommand(command);
-            postProcess(command);
         }
+        postProcess(command);
     }
 
     protected boolean isCritical(Command command) {
@@ -60,6 +60,8 @@ public abstract class DroidService {
     protected void postProcess(Command command) {
         meterRegistry.counter("commands.completed", "author", command.getAuthor())
                 .increment();
-        meterRegistry.gauge("commands.queue.size", threadPoolExecutor.getQueue(), BlockingQueue::size);
+        if(!isCritical(command)) {
+            meterRegistry.gauge("commands.queue.size", threadPoolExecutor.getQueue(), BlockingQueue::size);
+        }
     }
 }

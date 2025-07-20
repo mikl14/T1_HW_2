@@ -25,7 +25,7 @@ public class Bishop extends DroidService {
      * @param command
      */
     @Override
-    @WeylandWatchingYou(kafkaTopic = "droidTopic")
+    @WeylandWatchingYou(kafkaTopic = "droidTopic",logToTerminal = false)
     public void processCriticalCommand(Command command) {
         logger.info("Бишоп выполняет критически важную задачу: ! " + command.toString());
     }
